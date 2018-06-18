@@ -2,38 +2,74 @@
     <head>
         <title>Bluefish</title>
         <script>
+        var myCharacteristic;
+
+            function onStartButtonClick() {
+                let serviceUuid = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
+                if (serviceUuid.startsWith('0x')) {
+                    serviceUuid = parseInt(serviceUuid);
+                }
+
+                let characteristicUuid = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
+                if (characteristicUuid.startsWith('0x')) {
+                    characteristicUuid = parseInt(characteristicUuid);
+                }
+
+                log('Requesting Bluetooth Device...');
+                navigator.bluetooth.requestDevice({filters: [{services: [serviceUuid]}]})
+                .then(device => {
+                    log('Connecting to GATT Server...');
+                    return device.gatt.connect();
+                })
+                .then(server => {
+                    log('Getting Service...');
+                    return server.getPrimaryService(serviceUuid);
+                })
+                .then(service => {
+                    log('Getting Characteristic...');
+                    return service.getCharacteristic(characteristicUuid);
+                })
+                .then(characteristic => {
+                    myCharacteristic = characteristic;
+                    return myCharacteristic.startNotifications().then(_ => {
+                      log('> Notifications started');
+                      myCharacteristic.addEventListener('characteristicvaluechanged',
+                          handleNotifications);
+                    });
+                })
+                .catch(error => {
+                log('Argh! ' + error);
+                });
+            }
+
+            function onStopButtonClick() {
+                if (myCharacteristic) {
+                    myCharacteristic.stopNotifications()
+                    .then(_ => {
+                      log('> Notifications stopped');
+                      myCharacteristic.removeEventListener('characteristicvaluechanged',
+                          handleNotifications);
+                    })
+                    .catch(error => {
+                      log('Argh! ' + error);
+                    });
+                }
+            }
+
+            function handleNotifications(event) {
+                let value = event.target.value;
+                let a = [];
+                // Convert raw data bytes to hex values just for the sake of showing something.
+                // In the "real" world, you'd use data.getUint8, data.getUint16 or even
+                // TextDecoder to process raw data bytes.
+                for (let i = 0; i < value.byteLength; i++) {
+                    a.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
+                }
+                log('> ' + a.join(' '));
+            }
             
-            function onButtonClick()
+            function onButtonClickOld()
             {
-                /*
-                let filters = [];
-
-                let filterService = document.querySelector('#service').value;
-                if (filterService.startsWith('0x')) {
-                filterService = parseInt(filterService);
-                }
-                if (filterService) {
-                filters.push({services: [filterService]});
-                }
-
-                let filterName = document.querySelector('#name').value;
-                if (filterName) {
-                filters.push({name: filterName});
-                }
-
-                let filterNamePrefix = document.querySelector('#namePrefix').value;
-                if (filterNamePrefix) {
-                filters.push({namePrefix: filterNamePrefix});
-                }
-
-                let options = {};
-                if (document.querySelector('#allDevices').checked) {
-                options.acceptAllDevices = true;
-                } else {
-                options.filters = filters;
-                }
-                */
-                
                 let options = {};
                 options.acceptAllDevices = true;
 
@@ -60,7 +96,9 @@
     </head>
     <body>
         <h1>Welcome to the BlueFish app</h>
-        <button onclick="onButtonClick()">Now two</button>
+        <button onclick="onButtonClick()">Old</button>
+        <button onclick="onStartButtonClick()" style="width: 200px; height: 200px;">Start</button>
+        <button onclick="onStopButtonClick()">Stop</button>
         <div class="output"></div>
     </body>
 </html>
