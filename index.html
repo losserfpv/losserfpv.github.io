@@ -7,12 +7,12 @@
             function onStartButtonClick() {
                 let serviceUuid = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
                 //if (serviceUuid.startsWith('0x')) {
-                    serviceUuid = parseInt(serviceUuid);
+                   // serviceUuid = parseInt(serviceUuid);
                 //}
 
                 let characteristicUuid = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
                 //if (characteristicUuid.startsWith('0x')) {
-                    characteristicUuid = parseInt(characteristicUuid);
+                  //  characteristicUuid = parseInt(characteristicUuid);
                 //}
 
                 log('Requesting Bluetooth Device...');
@@ -100,8 +100,9 @@
     </head>
     <body>
         <h1>Welcome to the BlueFish app</h>
+        <br>
         <button onclick="onOldButtonClick()" style="width: 200px; height: 200px;">Old</button>
-        <button onclick="onStartButtonClick()" style="width: 200px; height: 200px;">Start</button>
+        <button onclick="onStartButtonClick()" style="width: 400px; height: 200px;">Start</button>
         <button onclick="onStopButtonClick()" style="width: 200px; height: 200px;">Stop</button>
         <div class="output"></div>
     </body>
