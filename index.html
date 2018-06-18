@@ -67,7 +67,7 @@
                     //result += String.fromCharCode(parseInt(value[i], 2));
                     result += value.getUint8(i).toString(16);
                 }
-                log('> ' + value + " >> " + result);
+                log('> ' + value + " >> " + new TextDecoder("utf-8").decode(value));
             }
             
             function onOldButtonClick()
@@ -105,7 +105,7 @@
     <body>
         <h1>Welcome to the BlueFish app</h>
         <br>
-        <button onclick="onOldButtonClick()" style="width: 300px; height: 200px;">Old</button>
+        <button onclick="onOldButtonClick()" style="width: 200px; height: 200px;">Old</button>
         <button onclick="onStartButtonClick()" style="width: 200px; height: 200px;">Start</button>
         <button onclick="onStopButtonClick()" style="width: 200px; height: 200px;">Stop</button>
         <button onclick="clearConsole()" style="width: 200px; height: 200px;">Clear</button>
