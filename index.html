@@ -64,7 +64,7 @@
                     //a.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
                     //a.push(value.getUint8(i));
                     
-                    result += String.fromCharCode(parseInt(array[i], 2));
+                    result += String.fromCharCode(parseInt(value[i], 2));
                 }
                 log('> ' + result);
             }
