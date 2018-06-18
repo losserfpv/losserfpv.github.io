@@ -34,10 +34,6 @@
                 }
                 */
                 
-                let output = document.querySelector('.output');
-                
-                output.innerHTML = "Hi";
-
                 let options = {};
                 options.acceptAllDevices = true;
 
@@ -54,11 +50,17 @@
                 });
             }
             
+            function log(let stringvalue)
+            {
+                let output = document.querySelector('.output');
+                output.innerHTML += "<br>" + stringvalue;
+            }
+            
         </script>
     </head>
     <body>
         <h1>Welcome to the BlueFish app</h>
-        <button onclick="onButtonClick()">Go</button>
+        <button onclick="onButtonClick()">Now</button>
         <div class="output"></div>
     </body>
 </html>
