@@ -2,15 +2,15 @@
     <head>
         <title>Bluefish</title>
         <script>
-        var myCharacteristic;
+            var myCharacteristic;
 
             function onStartButtonClick() {
-                let serviceUuid = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
+                let serviceUuid = 4fafc201-1fb5-459e-8fcc-c5c9c331914b;
                 if (serviceUuid.startsWith('0x')) {
                     serviceUuid = parseInt(serviceUuid);
                 }
 
-                let characteristicUuid = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
+                let characteristicUuid = beb5483e-36e1-4688-b7f5-ea07361b26a8;
                 if (characteristicUuid.startsWith('0x')) {
                     characteristicUuid = parseInt(characteristicUuid);
                 }
@@ -68,7 +68,7 @@
                 log('> ' + a.join(' '));
             }
             
-            function onButtonClickOld()
+            function onOldButtonClick()
             {
                 let options = {};
                 options.acceptAllDevices = true;
@@ -96,9 +96,9 @@
     </head>
     <body>
         <h1>Welcome to the BlueFish app</h>
-        <button onclick="onButtonClick()">Old</button>
+        <button onclick="onOldButtonClick()" style="width: 200px; height: 200px;">Old</button>
         <button onclick="onStartButtonClick()" style="width: 200px; height: 200px;">Start</button>
-        <button onclick="onStopButtonClick()">Stop</button>
+        <button onclick="onStopButtonClick()" style="width: 200px; height: 200px;">Stop</button>
         <div class="output"></div>
     </body>
 </html>
