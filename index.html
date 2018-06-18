@@ -5,22 +5,15 @@
             var myCharacteristic;
 
             function onStartButtonClick() {
+                clearConsole();
+                
                 let serviceUuid = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
-                //if (serviceUuid.startsWith('0x')) {
-                   // serviceUuid = parseInt(serviceUuid);
-                //}
 
                 let characteristicUuid = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
-                //if (characteristicUuid.startsWith('0x')) {
-                  //  characteristicUuid = parseInt(characteristicUuid);
-                //}
 
                 log('Requesting Bluetooth Device...');
-                let options = {};
-                options.acceptAllDevices = true;
 
                 navigator.bluetooth.requestDevice({acceptAllDevices: true, optionalServices: [serviceUuid]})
-                //navigator.bluetooth.requestDevice(options)
                 .then(device => {
                     log('Connecting to GATT Server...');
                     return device.gatt.connect();
@@ -95,6 +88,12 @@
                 let output = document.querySelector('.output');
                 output.innerHTML += "<br>" + stringvalue;
             }
+            
+            function clearConsole()
+            {
+                let output = document.querySelector('.output');
+                output.innerHTML = "";
+            }                
             
         </script>
     </head>
