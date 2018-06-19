@@ -1,1 +1,114 @@
+<html>
+    <head>
+        <title>Rain Care</title>
+        <script>
+            var myCharacteristic;
 
+            function onStartButtonClick() {
+                clearConsole();
+                
+                let serviceUuid = '0b61456e-82f4-4c39-b1ec-fc81cae37135';
+
+                let characteristicUuid = 'f1f5856d-35e1-4cbb-8c3e-77d31d50f3bb';
+
+                log('Requesting Bluetooth Device...');
+
+                //navigator.bluetooth.requestDevice({acceptAllDevices: true, optionalServices: [serviceUuid]})
+                navigator.bluetooth.requestDevice({filters: [{name: "RainCare BLE"}], optionalServices: [serviceUuid]})
+                .then(device => {
+                    log('Connecting to GATT Server...');
+                    return device.gatt.connect();
+                })
+                .then(server => {
+                    log('Getting Service...');
+                    return server.getPrimaryService(serviceUuid);
+                })
+                .then(service => {
+                    log('Getting Characteristic...');
+                    return service.getCharacteristic(characteristicUuid);
+                })
+                .then(characteristic => {
+                    myCharacteristic = characteristic;
+                    return myCharacteristic.startNotifications().then(_ => {
+                      log('> Notifications started');
+                      myCharacteristic.addEventListener('characteristicvaluechanged',
+                          handleNotifications);
+                    });
+                })
+                .catch(error => {
+                log('Argh! ' + error);
+                });
+            }
+
+            function onStopButtonClick() {
+                if (myCharacteristic) {
+                    myCharacteristic.stopNotifications()
+                    .then(_ => {
+                      log('> Notifications stopped');
+                      myCharacteristic.removeEventListener('characteristicvaluechanged',
+                          handleNotifications);
+                    })
+                    .catch(error => {
+                      log('Argh! ' + error);
+                    });
+                }
+            }
+
+            function handleNotifications(event) {
+                let value = event.target.value;
+                let a = [];
+                let result = "";
+                // Convert raw data bytes to hex values just for the sake of showing something.
+                // In the "real" world, you'd use data.getUint8, data.getUint16 or even
+                // TextDecoder to process raw data bytes.
+                for (let i = 0; i < value.length; ++i) {
+                    //a.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
+                    //a.push(value.getUint8(i));
+                    
+                    //result += String.fromCharCode(parseInt(value[i], 2));
+                    result += value.getUint8(i).toString(16);
+                }
+                log('> ' + value + " >> " + new TextDecoder("utf-8").decode(value));
+            }
+            
+            function onOldButtonClick()
+            {
+                let options = {};
+                options.acceptAllDevices = true;
+
+                log('Requesting Bluetooth Device...');
+                log('with ' + JSON.stringify(options));
+                navigator.bluetooth.requestDevice(options)
+                .then(device => {
+                log('> Name:             ' + device.name);
+                log('> Id:               ' + device.id);
+                log('> Connected:        ' + device.gatt.connected);
+                })
+                .catch(error => {
+                log('Argh! ' + error);
+                });
+            }
+            
+            function log(stringvalue)
+            {
+                let output = document.querySelector('.output');
+                output.innerHTML += "<br>" + stringvalue;
+            }
+            
+            function clearConsole()
+            {
+                let output = document.querySelector('.output');
+                output.innerHTML = "";
+            }                
+            
+        </script>
+    </head>
+    <body>
+        <h1>Welcome to the BlueFish app</h>
+        <br>
+        <button onclick="clearConsole()" style="width: 200px; height: 200px;">Clear</button>
+        <p>WiFi SSID:/p><input id="ssid" /><br>
+        <p>WiFi Password:</p><input id="pass" /><br>
+        <div class="output"></div>
+    </body>
+</html>
