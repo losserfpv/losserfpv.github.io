@@ -2,9 +2,9 @@
     <head>
         <title>Rain Care</title>
         <script>
-            //var myCharacteristic;
             var characteristics;
             var decoder = new TextDecoder("utf-8");
+            var encoder = new TextEncoder("utf-8");
             
             async function onStartButtonClick() {
                 clearConsole();
@@ -64,6 +64,7 @@
             {
                 for(i=0; i<characteristics.length; i++)
                 {
+                    characteristics[i].writeValue(encoder.encode("write " + i));
                     let value = await characteristics[i].readValue();
                     value = decoder.decode(value);
                     log(value);
