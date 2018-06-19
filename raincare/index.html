@@ -9,14 +9,16 @@
                 
                 let serviceUuid = '0b61456e-82f4-4c39-b1ec-fc81cae37135';
 
-                let characteristicUuid = 'f1f5856d-35e1-4cbb-8c3e-77d31d50f3bb';
+                let characteristicUuid_SSID = 'f1f5856d-35e1-4cbb-8c3e-77d31d50f3bb';
+                let characteristicUuid_PASS = '01549472-73bf-4a37-9bb0-32ab78d028f8';
 
                 log('Requesting Bluetooth Device...');
 
                 
                 try {
                     log('Requesting Bluetooth Device...');
-                    const device = await navigator.bluetooth.requestDevice({filters: [{name: "RainCare BLE"}], optionalServices: [serviceUuid]});
+                    const device = await navigator.bluetooth.requestDevice(
+                        {filters: [{name: "RainCare BLE"}], optionalServices: [serviceUuid]});
 
                     log('Connecting to GATT Server...');
                     const server = await device.gatt.connect();
@@ -26,12 +28,16 @@
 
                     log('Getting Characteristics...');
                     let characteristics;
+                    /*
                     if (characteristicUuid) {
                       characteristics = await service.getCharacteristics(characteristicUuid);
                     } else {
                       characteristics = await service.getCharacteristics();
                     }
-
+                    */
+                    
+                    characteristics = await service.getCharacteristics();
+                    
                     log('> Characteristics: ' +
                       characteristics.map(c => c.uuid).join('\n' + ' '.repeat(19)));
                 } catch(error) {
