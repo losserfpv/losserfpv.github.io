@@ -12,20 +12,13 @@
             async function onStartButtonClick() {
                 clearConsole();
 
-                log('Requesting Bluetooth Device...');
-
                 try {
-                    log('Requesting Bluetooth Device...');
-                    const device = await navigator.bluetooth.requestDevice(
+                     const device = await navigator.bluetooth.requestDevice(
                         {filters: [{name: "RainCare BLE"}], optionalServices: [serviceUuid]});
 
-                    log('Connecting to GATT Server...');
                     const server = await device.gatt.connect();
 
-                    log('Getting Service...');
                     const service = await server.getPrimaryService(serviceUuid);
-
-                    log('Getting Characteristics...');
                       
                     characteristics = await service.getCharacteristics();
                     log("Size: " + characteristics.length);
@@ -34,7 +27,6 @@
                     {
                         let value = await characteristics[i].readValue();
                         value = decoder.decode(value);
-                        log("UUID: " + characteristics[i].uuid);
                         
                         let elementID;
                         if(characteristics[i].uuid == characteristicUuid_SSID)
@@ -45,9 +37,11 @@
                         {
                             elementID = "pass";
                         }
-                        log("New: " + value);
                         let textField = document.getElementById(elementID);
                         textField.value = value;
+                        
+                        let table = document.getElementById("table");
+                        table.style.display = "initial";
                     }
                     
                 } catch(error) {
@@ -69,7 +63,6 @@
                     }
                     let textField = document.getElementById(elementID);
                     await characteristics[i].writeValue(encoder.encode(textField.value));
-                    log("wrote index " + i);
                 }
             }
 
@@ -92,7 +85,7 @@
         <br>
         <button onclick="onStartButtonClick()" style="width: 100px; height: 50px;">Connect</button>
         <button onclick="onSave()" style="width: 100px; height: 50px;">Save</button>
-        <table>
+        <table id="table" style="display: none;">
             <tr>
                 <td>WiFi SSID:</td><td><input type="text" id="ssid" /></td>
             </tr>
