@@ -38,6 +38,8 @@
                         let value = await characteristics[i].readValue();
                         value = decoder.decode(value);
                         log("New: " + value);
+                        let ssid = document.getElementByID("ssid");
+                        ssid.innerHTML = value;
                     }
                     
                 } catch(error) {
@@ -46,84 +48,8 @@
                 
                 
                 
-                /*
-                //navigator.bluetooth.requestDevice({acceptAllDevices: true, optionalServices: [serviceUuid]})
-                navigator.bluetooth.requestDevice({filters: [{name: "RainCare BLE"}], optionalServices: [serviceUuid]})
-                .then(device => {
-                    log('Connecting to GATT Server...');
-                    return device.gatt.connect();
-                })
-                .then(server => {
-                    log('Getting Service...');
-                    return server.getPrimaryService(serviceUuid);
-                })
-                .then(service => {
-                    log('Getting Characteristic...');
-                    return service.getCharacteristic(characteristicUuid);
-                })
-                .then(characteristic => {
-                    myCharacteristic = characteristic;
-                    return myCharacteristic.startNotifications().then(_ => {
-                      log('> Notifications started');
-                      myCharacteristic.addEventListener('characteristicvaluechanged',
-                          handleNotifications);
-                    });
-                })
-                .catch(error => {
-                log('Argh! ' + error);
-                });
-                */
             }
 
-            function onStopButtonClick() {
-                if (myCharacteristic) {
-                    myCharacteristic.stopNotifications()
-                    .then(_ => {
-                      log('> Notifications stopped');
-                      myCharacteristic.removeEventListener('characteristicvaluechanged',
-                          handleNotifications);
-                    })
-                    .catch(error => {
-                      log('Argh! ' + error);
-                    });
-                }
-            }
-
-            function handleNotifications(event) {
-                let value = event.target.value;
-                let a = [];
-                let result = "";
-                // Convert raw data bytes to hex values just for the sake of showing something.
-                // In the "real" world, you'd use data.getUint8, data.getUint16 or even
-                // TextDecoder to process raw data bytes.
-                for (let i = 0; i < value.length; ++i) {
-                    //a.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
-                    //a.push(value.getUint8(i));
-                    
-                    //result += String.fromCharCode(parseInt(value[i], 2));
-                    result += value.getUint8(i).toString(16);
-                }
-                log('> ' + value + " >> " + new TextDecoder("utf-8").decode(value));
-            }
-            
-            function onOldButtonClick()
-            {
-                let options = {};
-                options.acceptAllDevices = true;
-
-                log('Requesting Bluetooth Device...');
-                log('with ' + JSON.stringify(options));
-                navigator.bluetooth.requestDevice(options)
-                .then(device => {
-                log('> Name:             ' + device.name);
-                log('> Id:               ' + device.id);
-                log('> Connected:        ' + device.gatt.connected);
-                })
-                .catch(error => {
-                log('Argh! ' + error);
-                });
-            }
-            
             function log(stringvalue)
             {
                 let output = document.querySelector('.output');
