@@ -9,7 +9,7 @@
             var decoder = new TextDecoder("utf-8");
             var encoder = new TextEncoder("utf-8");
             
-            async function onStartButtonClick() {
+            async function onConnect() {
                 clearConsole();
 
                 try {
@@ -21,7 +21,6 @@
                     const service = await server.getPrimaryService(serviceUuid);
                       
                     characteristics = await service.getCharacteristics();
-                    log("Size: " + characteristics.length);
                     
                     for(i=0; i<characteristics.length; i++)
                     {
@@ -42,7 +41,13 @@
                         
                         let table = document.getElementById("table");
                         table.style.display = "initial";
-                    }
+                        
+                        let btnSave = document.getElementById("btnSave");
+                        btnSave.style.display = "initial";
+                        
+                        let btnConnect = document.getElementById("btnConnect");
+                        btnConnect.style.display = "none";
+                   }
                     
                 } catch(error) {
                     log('Argh! ' + error);
@@ -83,7 +88,8 @@
     <body>
         <h1>Welcome to the Rain Care Configurator</h>
         <br>
-        <button onclick="onStartButtonClick()" style="width: 100px; height: 50px;">Connect</button>
+        <button id="btnConnect" onclick="onConnect()" style="width: 100px; height: 50px;">Connect</button>
+        <button id="btnSave" onclick="onSave()" style="width: 100px; height: 50px; display: none;">Save</button>
         <br>
         <table id="table" style="display: none;">
             <tr>
@@ -92,9 +98,6 @@
             <tr>
                 <td>WiFi Password:</td><td><input type="text" id="pass" /></td>
             </tr>
-            <tr>
-                <td></td><td><button onclick="onSave()" style="width: 100px; height: 50px;">Save</button></td>
-            </tr>    
         </table>
         <div class="output"></div>
     </body>
