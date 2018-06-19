@@ -13,7 +13,8 @@
 
                 log('Requesting Bluetooth Device...');
 
-                navigator.bluetooth.requestDevice({acceptAllDevices: true, optionalServices: [serviceUuid]})
+                //navigator.bluetooth.requestDevice({acceptAllDevices: true, optionalServices: [serviceUuid]})
+                navigator.bluetooth.requestDevice({filters: [{name: "BlueFish"}], optionalServices: [serviceUuid]})
                 .then(device => {
                     log('Connecting to GATT Server...');
                     return device.gatt.connect();
@@ -106,7 +107,7 @@
         <h1>Welcome to the BlueFish app</h>
         <br>
         <button onclick="onOldButtonClick()" style="width: 200px; height: 200px;">Old</button>
-        <button onclick="onStartButtonClick()" style="width: 200px; height: 200px;">Start</button>
+        <button onclick="onStartButtonClick()" style="width: 300px; height: 200px; color: blue;">Start</button>
         <button onclick="onStopButtonClick()" style="width: 200px; height: 200px;">Stop</button>
         <button onclick="clearConsole()" style="width: 200px; height: 200px;">Clear</button>
         <div class="output"></div>
