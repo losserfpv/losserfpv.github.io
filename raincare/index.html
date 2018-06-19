@@ -16,8 +16,7 @@
                 
                 try {
                     log('Requesting Bluetooth Device...');
-                    const device = await navigator.bluetooth.requestDevice({
-                        filters: [{services: [serviceUuid]}]});
+                    const device = await navigator.bluetooth.requestDevice({filters: [{name: "RainCare BLE"}], optionalServices: [serviceUuid]});
 
                     log('Connecting to GATT Server...');
                     const server = await device.gatt.connect();
