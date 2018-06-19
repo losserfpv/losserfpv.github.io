@@ -39,7 +39,7 @@
                         value = decoder.decode(value);
                         log("New: " + value);
                         let ssid = document.getElementById("ssid");
-                        ssid.innerHTML = value;
+                        ssid.value = value;
                     }
                     
                 } catch(error) {
@@ -70,10 +70,10 @@
         <button onclick="onStartButtonClick()" style="width: 100px; height: 50px;">Connect</button>
         <table>
             <tr>
-                <td>WiFi SSID:</td><td><input id="ssid" /></td>
+                <td>WiFi SSID:</td><td><input type="text" id="ssid" /></td>
             </tr>
             <tr>
-                <td>WiFi Password:</td><td><input id="pass" /></td>
+                <td>WiFi Password:</td><td><input type="text" id="pass" /></td>
             </tr>
         </table>
         <div class="output"></div>
