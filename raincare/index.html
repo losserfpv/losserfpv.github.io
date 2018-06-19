@@ -13,6 +13,35 @@
 
                 log('Requesting Bluetooth Device...');
 
+                
+                try {
+                    log('Requesting Bluetooth Device...');
+                    const device = await navigator.bluetooth.requestDevice({
+                        filters: [{services: [serviceUuid]}]});
+
+                    log('Connecting to GATT Server...');
+                    const server = await device.gatt.connect();
+
+                    log('Getting Service...');
+                    const service = await server.getPrimaryService(serviceUuid);
+
+                    log('Getting Characteristics...');
+                    let characteristics;
+                    if (characteristicUuid) {
+                      characteristics = await service.getCharacteristics(characteristicUuid);
+                    } else {
+                      characteristics = await service.getCharacteristics();
+                    }
+
+                    log('> Characteristics: ' +
+                      characteristics.map(c => c.uuid).join('\n' + ' '.repeat(19)));
+                } catch(error) {
+                    log('Argh! ' + error);
+                }
+                
+                
+                
+                /*
                 //navigator.bluetooth.requestDevice({acceptAllDevices: true, optionalServices: [serviceUuid]})
                 navigator.bluetooth.requestDevice({filters: [{name: "RainCare BLE"}], optionalServices: [serviceUuid]})
                 .then(device => {
@@ -38,6 +67,7 @@
                 .catch(error => {
                 log('Argh! ' + error);
                 });
+                */
             }
 
             function onStopButtonClick() {
@@ -106,7 +136,7 @@
     <body>
         <h1>Welcome to the Rain Care Configurator</h>
         <br>
-        <button onclick="clearConsole()" style="width: 200px; height: 200px;">Clear</button>
+        <button onclick="onStartButtonClick()" style="width: 100px; height: 50px;">Connect</button>
         <table>
             <tr>
                 <td>WiFi SSID:</td><td><input id="ssid" /></td>
