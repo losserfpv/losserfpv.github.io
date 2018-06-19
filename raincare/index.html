@@ -37,7 +37,7 @@
                     */
                     
                     characteristics = await service.getCharacteristics();
-                    log("Size: " + characteristics.length());
+                    log("Size: " + characteristics);
                     
                     log('> Characteristics: ' +
                       characteristics.map(c => c.uuid).join('\n' + ' '.repeat(19)));
