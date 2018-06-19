@@ -84,7 +84,7 @@
         <h1>Welcome to the Rain Care Configurator</h>
         <br>
         <button onclick="onStartButtonClick()" style="width: 100px; height: 50px;">Connect</button>
-        <button onclick="onSave()" style="width: 100px; height: 50px;">Save</button>
+        <br>
         <table id="table" style="display: none;">
             <tr>
                 <td>WiFi SSID:</td><td><input type="text" id="ssid" /></td>
@@ -92,6 +92,9 @@
             <tr>
                 <td>WiFi Password:</td><td><input type="text" id="pass" /></td>
             </tr>
+            <tr>
+                <button onclick="onSave()" style="width: 100px; height: 50px;">Save</button>
+            </tr>    
         </table>
         <div class="output"></div>
     </body>
