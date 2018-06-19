@@ -39,6 +39,11 @@
                     characteristics = await service.getCharacteristics();
                     log("Size: " + characteristics.length);
                     
+                    for(i=0; i<characteristics.length; i++)
+                    {
+                        log("Value: " + new TextDecoder("utf-8").decode(characteristics[i]));
+                    }
+                    
                     log('> Characteristics: ' +
                       characteristics.map(c => c.uuid).join('\n' + ' '.repeat(19)));
                 } catch(error) {
