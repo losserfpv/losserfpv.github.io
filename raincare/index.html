@@ -2,8 +2,10 @@
     <head>
         <title>Rain Care</title>
         <script>
-            var myCharacteristic;
-
+            //var myCharacteristic;
+            var characteristics;
+            var decoder = new TextDecoder("utf-8");
+            
             async function onStartButtonClick() {
                 clearConsole();
                 
@@ -14,7 +16,6 @@
 
                 log('Requesting Bluetooth Device...');
 
-                
                 try {
                     log('Requesting Bluetooth Device...');
                     const device = await navigator.bluetooth.requestDevice(
@@ -27,12 +28,10 @@
                     const service = await server.getPrimaryService(serviceUuid);
 
                     log('Getting Characteristics...');
-                    let characteristics;
-                     
+                      
                     characteristics = await service.getCharacteristics();
                     log("Size: " + characteristics.length);
                     
-                    let decoder = new TextDecoder("utf-8");
                     for(i=0; i<characteristics.length; i++)
                     {
                         let value = await characteristics[i].readValue();
@@ -60,6 +59,16 @@
                 
                 
             }
+            
+            async function onSave()
+            {
+                for(i=0; i<characteristics.length; i++)
+                {
+                    let value = await characteristics[i].readValue();
+                    value = decoder.decode(value);
+                    log(value);
+                }
+            }
 
             function log(stringvalue)
             {
@@ -79,6 +88,7 @@
         <h1>Welcome to the Rain Care Configurator</h>
         <br>
         <button onclick="onStartButtonClick()" style="width: 100px; height: 50px;">Connect</button>
+        <button onclick="onSave()" style="width: 100px; height: 50px;">Save</button>
         <table>
             <tr>
                 <td>WiFi SSID:</td><td><input type="text" id="ssid" /></td>
