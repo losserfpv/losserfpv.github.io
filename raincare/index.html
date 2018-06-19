@@ -48,23 +48,29 @@
                             elementID = "pass";
                         }
                         log("New: " + value);
-                        let ssid = document.getElementById(elementID);
-                        ssid.value = value;
+                        let textField = document.getElementById(elementID);
+                        textField.value = value;
                     }
                     
                 } catch(error) {
                     log('Argh! ' + error);
                 }
-                
-                
-                
             }
             
             async function onSave()
             {
                 for(i=0; i<characteristics.length; i++)
                 {
-                    await characteristics[i].writeValue(encoder.encode("write " + i));
+                    if(characteristics[i].uuid == characteristicUuid_SSID)
+                    {
+                        elementID = "ssid";
+                    }
+                    else if(characteristics[i].uuid == characteristicUuid_PASS)
+                    {
+                        elementID = "pass";
+                    }
+                    let textField = document.getElementById(elementID);
+                    await characteristics[i].writeValue(encoder.encode(textField.value));
                     log("wrote index " + i);
                 }
             }
