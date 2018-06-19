@@ -2,17 +2,15 @@
     <head>
         <title>Rain Care</title>
         <script>
+            var serviceUuid = '0b61456e-82f4-4c39-b1ec-fc81cae37135';
+            var characteristicUuid_SSID = 'f1f5856d-35e1-4cbb-8c3e-77d31d50f3bb';
+            var characteristicUuid_PASS = '01549472-73bf-4a37-9bb0-32ab78d028f8';
             var characteristics;
             var decoder = new TextDecoder("utf-8");
             var encoder = new TextEncoder("utf-8");
             
             async function onStartButtonClick() {
                 clearConsole();
-                
-                let serviceUuid = '0b61456e-82f4-4c39-b1ec-fc81cae37135';
-
-                let characteristicUuid_SSID = 'f1f5856d-35e1-4cbb-8c3e-77d31d50f3bb';
-                let characteristicUuid_PASS = '01549472-73bf-4a37-9bb0-32ab78d028f8';
 
                 log('Requesting Bluetooth Device...');
 
