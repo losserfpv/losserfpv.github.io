@@ -41,7 +41,8 @@
                     
                     for(i=0; i<characteristics.length; i++)
                     {
-                        log("Value: " + new TextDecoder("utf-8").decode(characteristics[i]));
+                        let value = await characteristics[i].readValue();
+                        log("Value: " + new TextDecoder("utf-8").decode(value));
                     }
                     
                     log('> Characteristics: ' +
