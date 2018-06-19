@@ -38,7 +38,7 @@
                         let value = await characteristics[i].readValue();
                         value = decoder.decode(value);
                         log("New: " + value);
-                        let ssid = document.getElementByID("ssid");
+                        let ssid = document.getElementById("ssid");
                         ssid.innerHTML = value;
                     }
                     
