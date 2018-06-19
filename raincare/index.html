@@ -28,25 +28,18 @@
 
                     log('Getting Characteristics...');
                     let characteristics;
-                    /*
-                    if (characteristicUuid) {
-                      characteristics = await service.getCharacteristics(characteristicUuid);
-                    } else {
-                      characteristics = await service.getCharacteristics();
-                    }
-                    */
-                    
+                     
                     characteristics = await service.getCharacteristics();
                     log("Size: " + characteristics.length);
                     
+                    let decoder = new TextDecoder("utf-8");
                     for(i=0; i<characteristics.length; i++)
                     {
                         let value = await characteristics[i].readValue();
-                        log("Value: " + new TextDecoder("utf-8").decode(value));
+                        value = decoder.decode(value);
+                        log("New: " + value);
                     }
                     
-                    log('> Characteristics: ' +
-                      characteristics.map(c => c.uuid).join('\n' + ' '.repeat(19)));
                 } catch(error) {
                     log('Argh! ' + error);
                 }
