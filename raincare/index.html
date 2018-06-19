@@ -38,8 +38,18 @@
                         let value = await characteristics[i].readValue();
                         value = decoder.decode(value);
                         log("UUID: " + characteristics[i].uuid);
+                        
+                        let elementID;
+                        if(characteristics[i].uuid == characteristicUuid_SSID)
+                        {
+                            elementID = "ssid";
+                        }
+                        else if(characteristics[i].uuid == characteristicUuid_PASS)
+                        {
+                            elementID = "pass";
+                        }
                         log("New: " + value);
-                        let ssid = document.getElementById("ssid");
+                        let ssid = document.getElementById(elementID);
                         ssid.value = value;
                     }
                     
