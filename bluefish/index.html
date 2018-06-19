@@ -1,1 +1,114 @@
+<html>
+    <head>
+        <title>Bluefish</title>
+        <script>
+            var myCharacteristic;
 
+            function onStartButtonClick() {
+                clearConsole();
+                
+                let serviceUuid = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
+
+                let characteristicUuid = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
+
+                log('Requesting Bluetooth Device...');
+
+                navigator.bluetooth.requestDevice({acceptAllDevices: true, optionalServices: [serviceUuid]})
+                .then(device => {
+                    log('Connecting to GATT Server...');
+                    return device.gatt.connect();
+                })
+                .then(server => {
+                    log('Getting Service...');
+                    return server.getPrimaryService(serviceUuid);
+                })
+                .then(service => {
+                    log('Getting Characteristic...');
+                    return service.getCharacteristic(characteristicUuid);
+                })
+                .then(characteristic => {
+                    myCharacteristic = characteristic;
+                    return myCharacteristic.startNotifications().then(_ => {
+                      log('> Notifications started');
+                      myCharacteristic.addEventListener('characteristicvaluechanged',
+                          handleNotifications);
+                    });
+                })
+                .catch(error => {
+                log('Argh! ' + error);
+                });
+            }
+
+            function onStopButtonClick() {
+                if (myCharacteristic) {
+                    myCharacteristic.stopNotifications()
+                    .then(_ => {
+                      log('> Notifications stopped');
+                      myCharacteristic.removeEventListener('characteristicvaluechanged',
+                          handleNotifications);
+                    })
+                    .catch(error => {
+                      log('Argh! ' + error);
+                    });
+                }
+            }
+
+            function handleNotifications(event) {
+                let value = event.target.value;
+                let a = [];
+                let result = "";
+                // Convert raw data bytes to hex values just for the sake of showing something.
+                // In the "real" world, you'd use data.getUint8, data.getUint16 or even
+                // TextDecoder to process raw data bytes.
+                for (let i = 0; i < value.length; ++i) {
+                    //a.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
+                    //a.push(value.getUint8(i));
+                    
+                    //result += String.fromCharCode(parseInt(value[i], 2));
+                    result += value.getUint8(i).toString(16);
+                }
+                log('> ' + value + " >> " + new TextDecoder("utf-8").decode(value));
+            }
+            
+            function onOldButtonClick()
+            {
+                let options = {};
+                options.acceptAllDevices = true;
+
+                log('Requesting Bluetooth Device...');
+                log('with ' + JSON.stringify(options));
+                navigator.bluetooth.requestDevice(options)
+                .then(device => {
+                log('> Name:             ' + device.name);
+                log('> Id:               ' + device.id);
+                log('> Connected:        ' + device.gatt.connected);
+                })
+                .catch(error => {
+                log('Argh! ' + error);
+                });
+            }
+            
+            function log(stringvalue)
+            {
+                let output = document.querySelector('.output');
+                output.innerHTML += "<br>" + stringvalue;
+            }
+            
+            function clearConsole()
+            {
+                let output = document.querySelector('.output');
+                output.innerHTML = "";
+            }                
+            
+        </script>
+    </head>
+    <body>
+        <h1>Welcome to the BlueFish app</h>
+        <br>
+        <button onclick="onOldButtonClick()" style="width: 200px; height: 200px;">Old</button>
+        <button onclick="onStartButtonClick()" style="width: 200px; height: 200px;">Start</button>
+        <button onclick="onStopButtonClick()" style="width: 200px; height: 200px;">Stop</button>
+        <button onclick="clearConsole()" style="width: 200px; height: 200px;">Clear</button>
+        <div class="output"></div>
+    </body>
+</html>
